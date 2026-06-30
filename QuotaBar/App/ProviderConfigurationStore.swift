@@ -187,7 +187,8 @@ final class ProviderConfigurationStore: ObservableObject {
     }
 
     private func registerDefaultProvidersIfNeeded() {
-        for provider in [CodexProvider(), MiniMaxProvider(), DeepSeekProvider()] {
+        let defaultProviders: [ProviderProtocol] = [CodexProvider(), MiniMaxProvider(), DeepSeekProvider()]
+        for provider in defaultProviders {
             if registry.provider(for: provider.providerId) == nil {
                 registry.register(provider: provider)
             }

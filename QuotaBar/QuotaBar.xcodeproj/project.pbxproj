@@ -24,6 +24,7 @@
 		AB0000000000000000000142 /* ProviderConfigurationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0000000000000000000015 /* ProviderConfigurationStore.swift */; };
 		AB0000000000000000000143 /* URLSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0000000000000000000016 /* URLSchemeHandler.swift */; };
 		AB0000000000000000000144 /* WebLoginSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0000000000000000000017 /* WebLoginSheet.swift */; };
+		AB0000000000000000000145 /* CodexParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0000000000000000000019 /* CodexParser.swift */; };
 		AB0000000000000000000109 /* QuotaBarWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AB0000000000000000000022 /* QuotaBarWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		AB0000000000000000000111 /* QuotaBarWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0000000000000000000011 /* QuotaBarWidget.swift */; };
 		AB0000000000000000000112 /* QuotaBarWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0000000000000000000012 /* QuotaBarWidgetBundle.swift */; };
@@ -31,6 +32,7 @@
 		AB0000000000000000000114 /* QuotaSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0000000000000000000004 /* QuotaSnapshot.swift */; };
 		AB0000000000000000000115 /* SharedSnapshotStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0000000000000000000006 /* SharedSnapshotStore.swift */; };
 		AB0000000000000000000121 /* QuotaBarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0000000000000000000031 /* QuotaBarTests.swift */; };
+		AB0000000000000000000122 /* CodexProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0000000000000000000032 /* CodexProviderTests.swift */; };
 		AB0000000000000000000131 /* QuotaBarWidgetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0000000000000000000041 /* QuotaBarWidgetTests.swift */; };
 		AB0000000000000000000132 /* QuotaBarWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0000000000000000000011 /* QuotaBarWidget.swift */; };
 /* End PBXBuildFile section */
@@ -91,6 +93,7 @@
 		AB0000000000000000000015 /* ProviderConfigurationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderConfigurationStore.swift; sourceTree = "<group>"; };
 		AB0000000000000000000016 /* URLSchemeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSchemeHandler.swift; sourceTree = "<group>"; };
 		AB0000000000000000000017 /* WebLoginSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebLoginSheet.swift; sourceTree = "<group>"; };
+		AB0000000000000000000019 /* CodexParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodexParser.swift; sourceTree = "<group>"; };
 		AB0000000000000000000009 /* QuotaBar.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = QuotaBar.entitlements; sourceTree = "<group>"; };
 		AB000000000000000000000A /* QuotaBarWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = QuotaBarWidget.entitlements; sourceTree = "<group>"; };
 		AB0000000000000000000018 /* QuotaBarInfo.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = QuotaBarInfo.plist; sourceTree = "<group>"; };
@@ -102,10 +105,12 @@
 		AB0000000000000000000023 /* QuotaBarTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QuotaBarTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB0000000000000000000024 /* QuotaBarWidgetTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QuotaBarWidgetTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB0000000000000000000031 /* QuotaBarTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuotaBarTests.swift; sourceTree = "<group>"; };
+		AB0000000000000000000032 /* CodexProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodexProviderTests.swift; sourceTree = "<group>"; };
 		AB0000000000000000000041 /* QuotaBarWidgetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuotaBarWidgetTests.swift; sourceTree = "<group>"; };
 		AB0000000000000000000051 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		AB0000000000000000000052 /* .env.example */ = {isa = PBXFileReference; lastKnownFileType = text; path = .env.example; sourceTree = "<group>"; };
 		AB0000000000000000000053 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		AB0000000000000000000054 /* providers-codex.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "providers-codex.md"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +130,7 @@
 				AB0000000000000000000508 /* Providers */,
 				AB0000000000000000000509 /* Widget */,
 				AB0000000000000000000510 /* Tests */,
+				AB0000000000000000000513 /* Docs */,
 				AB0000000000000000000051 /* README.md */,
 				AB0000000000000000000052 /* .env.example */,
 				AB0000000000000000000053 /* .gitignore */,
@@ -168,7 +174,7 @@
 		AB0000000000000000000505 /* Models */ = {isa = PBXGroup; children = (AB0000000000000000000004 /* QuotaSnapshot.swift */, ); path = Models; sourceTree = "<group>"; };
 		AB0000000000000000000506 /* Storage */ = {isa = PBXGroup; children = (AB0000000000000000000005 /* KeychainStore.swift */, AB0000000000000000000014 /* CredentialManager.swift */, AB0000000000000000000006 /* SharedSnapshotStore.swift */, ); path = Storage; sourceTree = "<group>"; };
 		AB0000000000000000000507 /* Scheduler */ = {isa = PBXGroup; children = (AB0000000000000000000007 /* RefreshScheduler.swift */, ); path = Scheduler; sourceTree = "<group>"; };
-		AB0000000000000000000508 /* Providers */ = {isa = PBXGroup; children = (AB0000000000000000000008 /* ProviderProtocol.swift */, AB000000000000000000000B /* ProviderRegistry.swift */, AB000000000000000000000C /* PlaceholderProvider.swift */, AB000000000000000000000D /* CodexProvider.swift */, AB000000000000000000000E /* MiniMaxProvider.swift */, AB000000000000000000000F /* DeepSeekProvider.swift */, ); path = Providers; sourceTree = "<group>"; };
+		AB0000000000000000000508 /* Providers */ = {isa = PBXGroup; children = (AB0000000000000000000008 /* ProviderProtocol.swift */, AB000000000000000000000B /* ProviderRegistry.swift */, AB000000000000000000000C /* PlaceholderProvider.swift */, AB000000000000000000000D /* CodexProvider.swift */, AB0000000000000000000019 /* CodexParser.swift */, AB000000000000000000000E /* MiniMaxProvider.swift */, AB000000000000000000000F /* DeepSeekProvider.swift */, ); path = Providers; sourceTree = "<group>"; };
 		AB0000000000000000000509 /* Widget */ = {isa = PBXGroup; children = (AB0000000000000000000011 /* QuotaBarWidget.swift */, AB0000000000000000000012 /* QuotaBarWidgetBundle.swift */, AB0000000000000000000013 /* Info.plist */, ); path = Widget; sourceTree = "<group>"; };
 		AB0000000000000000000510 /* Tests */ = {
 			isa = PBXGroup;
@@ -179,8 +185,9 @@
 			path = Tests;
 			sourceTree = "<group>";
 		};
-		AB0000000000000000000511 /* QuotaBarTests */ = {isa = PBXGroup; children = (AB0000000000000000000031 /* QuotaBarTests.swift */, ); path = QuotaBarTests; sourceTree = "<group>"; };
+		AB0000000000000000000511 /* QuotaBarTests */ = {isa = PBXGroup; children = (AB0000000000000000000031 /* QuotaBarTests.swift */, AB0000000000000000000032 /* CodexProviderTests.swift */, ); path = QuotaBarTests; sourceTree = "<group>"; };
 		AB0000000000000000000512 /* WidgetTests */ = {isa = PBXGroup; children = (AB0000000000000000000041 /* QuotaBarWidgetTests.swift */, ); path = WidgetTests; sourceTree = "<group>"; };
+		AB0000000000000000000513 /* Docs */ = {isa = PBXGroup; children = (AB0000000000000000000054 /* providers-codex.md */, ); path = Docs; sourceTree = "<group>"; };
 		AB0000000000000000000520 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -314,6 +321,7 @@
 				AB0000000000000000000142 /* ProviderConfigurationStore.swift in Sources */,
 				AB0000000000000000000143 /* URLSchemeHandler.swift in Sources */,
 				AB0000000000000000000144 /* WebLoginSheet.swift in Sources */,
+				AB0000000000000000000145 /* CodexParser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -329,7 +337,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		AB0000000000000000000603 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (AB0000000000000000000121 /* QuotaBarTests.swift in Sources */, ); runOnlyForDeploymentPostprocessing = 0; };
+		AB0000000000000000000603 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (AB0000000000000000000121 /* QuotaBarTests.swift in Sources */, AB0000000000000000000122 /* CodexProviderTests.swift in Sources */, ); runOnlyForDeploymentPostprocessing = 0; };
 		AB0000000000000000000604 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (AB0000000000000000000132 /* QuotaBarWidget.swift in Sources */, AB0000000000000000000131 /* QuotaBarWidgetTests.swift in Sources */, ); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXSourcesBuildPhase section */
 

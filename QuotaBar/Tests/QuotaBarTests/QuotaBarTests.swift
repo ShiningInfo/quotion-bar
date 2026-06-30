@@ -184,7 +184,6 @@ final class QuotaBarTests: XCTestCase {
 
     func testPlaceholderProvidersReturnNotConfiguredSnapshots() async throws {
         let providers: [ProviderProtocol] = [
-            CodexProvider(),
             MiniMaxProvider(),
             DeepSeekProvider()
         ]
