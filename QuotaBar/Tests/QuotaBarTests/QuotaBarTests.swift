@@ -48,6 +48,39 @@ final class QuotaBarTests: XCTestCase {
         XCTAssertNil(KeychainStore.shared.load(service: "non-existent-service", account: "non-existent-account"))
     }
 
+    func testCredentialManagerUsesExpectedServices() throws {
+        let manager = CredentialManager()
+
+        let codex = try XCTUnwrap(manager.descriptor(for: ProviderIdentifier.codex))
+        let minimax = try XCTUnwrap(manager.descriptor(for: ProviderIdentifier.minimax))
+        let deepseek = try XCTUnwrap(manager.descriptor(for: ProviderIdentifier.deepseek))
+
+        XCTAssertEqual(codex.service, "quota-bar.codex")
+        XCTAssertEqual(minimax.service, "quota-bar.minimax")
+        XCTAssertEqual(deepseek.service, "quota-bar.deepseek")
+        XCTAssertEqual(codex.account, CredentialManager.defaultAccount)
+    }
+
+    func testCredentialManagerSaveAndDeleteAuthenticatedSession() {
+        let manager = CredentialManager()
+
+        manager.deleteCredential(for: ProviderIdentifier.codex)
+
+        XCTAssertFalse(manager.hasCredential(for: ProviderIdentifier.codex))
+        XCTAssertTrue(manager.saveAuthenticatedSession(for: ProviderIdentifier.codex))
+        XCTAssertTrue(manager.hasCredential(for: ProviderIdentifier.codex))
+        XCTAssertTrue(manager.deleteCredential(for: ProviderIdentifier.codex))
+        XCTAssertFalse(manager.hasCredential(for: ProviderIdentifier.codex))
+    }
+
+    func testURLSchemeHandlerParsesProviderDeepLink() throws {
+        let url = try XCTUnwrap(URL(string: "quotabar://provider/codex"))
+
+        XCTAssertEqual(URLSchemeHandler.providerId(from: url), ProviderIdentifier.codex)
+        XCTAssertNil(URLSchemeHandler.providerId(from: URL(string: "quotabar://provider/missing")!))
+        XCTAssertNil(URLSchemeHandler.providerId(from: URL(string: "https://provider/codex")!))
+    }
+
     // MARK: - SharedSnapshotStore Tests
 
     func testSharedSnapshotStoreWriteAndReadSnapshots() throws {
