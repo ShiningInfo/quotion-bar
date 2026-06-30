@@ -25,6 +25,10 @@ public struct ProviderQuota: Codable, Equatable, Identifiable {
     public let usedQuota: Double
     public let unit: String
     public let status: ProviderStatus
+    public let planType: String?
+    public let period: String?
+    public let sourceType: String?
+    public let errorMessage: String?
     
     public var remainingQuota: Double {
         max(0, totalQuota - usedQuota)
@@ -40,7 +44,11 @@ public struct ProviderQuota: Codable, Equatable, Identifiable {
         totalQuota: Double,
         usedQuota: Double,
         unit: String,
-        status: ProviderStatus = .unknown
+        status: ProviderStatus = .unknown,
+        planType: String? = nil,
+        period: String? = nil,
+        sourceType: String? = nil,
+        errorMessage: String? = nil
     ) {
         self.id = id
         self.name = name
@@ -48,6 +56,10 @@ public struct ProviderQuota: Codable, Equatable, Identifiable {
         self.usedQuota = usedQuota
         self.unit = unit
         self.status = status
+        self.planType = planType
+        self.period = period
+        self.sourceType = sourceType
+        self.errorMessage = errorMessage
     }
 }
 
@@ -55,5 +67,7 @@ public enum ProviderStatus: String, Codable, Equatable {
     case active
     case inactive
     case error
+    case sessionExpired
+    case syncFailed
     case unknown
 }
