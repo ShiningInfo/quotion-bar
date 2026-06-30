@@ -9,9 +9,14 @@ import SwiftUI
 
 @main
 struct QuotaBarApp: App {
+    @StateObject private var urlHandler = URLSchemeHandler()
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(urlHandler: urlHandler)
+                .onOpenURL { url in
+                    urlHandler.handle(url)
+                }
         }
     }
 }

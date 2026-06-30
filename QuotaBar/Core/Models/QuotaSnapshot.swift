@@ -67,10 +67,13 @@ public struct ProviderQuota: Codable, Equatable, Identifiable {
 }
 
 public enum ProviderStatus: String, Codable, Equatable {
+    case synced
+    case syncing
     case active
     case inactive
     case error
     case sessionExpired
     case syncFailed
+    case notConfigured
     case unknown
 }
