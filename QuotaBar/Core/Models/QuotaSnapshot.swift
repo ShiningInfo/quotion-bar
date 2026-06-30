@@ -26,6 +26,7 @@ public struct ProviderQuota: Codable, Equatable, Identifiable {
     public let unit: String
     public let status: ProviderStatus
     public let planType: String?
+    public let resetAt: Date?
     public let period: String?
     public let sourceType: String?
     public let errorMessage: String?
@@ -46,6 +47,7 @@ public struct ProviderQuota: Codable, Equatable, Identifiable {
         unit: String,
         status: ProviderStatus = .unknown,
         planType: String? = nil,
+        resetAt: Date? = nil,
         period: String? = nil,
         sourceType: String? = nil,
         errorMessage: String? = nil
@@ -57,6 +59,7 @@ public struct ProviderQuota: Codable, Equatable, Identifiable {
         self.unit = unit
         self.status = status
         self.planType = planType
+        self.resetAt = resetAt
         self.period = period
         self.sourceType = sourceType
         self.errorMessage = errorMessage
