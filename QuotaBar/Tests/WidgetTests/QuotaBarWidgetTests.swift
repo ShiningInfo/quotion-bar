@@ -6,7 +6,6 @@
 //
 
 import XCTest
-@testable import QuotaBarWidgetExtension
 
 final class QuotaBarWidgetTests: XCTestCase {
     

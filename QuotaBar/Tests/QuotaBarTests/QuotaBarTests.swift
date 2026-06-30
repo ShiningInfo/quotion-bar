@@ -65,7 +65,9 @@ final class QuotaBarTests: XCTestCase {
     // MARK: - SharedSnapshotStore Tests
     
     func testSharedSnapshotStoreSaveAndLoad() throws {
-        let store = SharedSnapshotStore.shared
+        let directory = try makeTemporaryDirectory()
+        let store = SharedSnapshotStore(containerURL: directory)
+        defer { try? FileManager.default.removeItem(at: directory) }
         
         // Clean up
         try? store.delete()
@@ -103,7 +105,9 @@ final class QuotaBarTests: XCTestCase {
     }
     
     func testSharedSnapshotStoreRawString() throws {
-        let store = SharedSnapshotStore.shared
+        let directory = try makeTemporaryDirectory()
+        let store = SharedSnapshotStore(containerURL: directory)
+        defer { try? FileManager.default.removeItem(at: directory) }
         
         // Clean up
         try? store.delete()
@@ -172,5 +176,12 @@ final class QuotaBarTests: XCTestCase {
         
         XCTAssertEqual(decoded.providers.count, snapshot.providers.count)
         XCTAssertEqual(decoded.providers.first?.id, snapshot.providers.first?.id)
+    }
+
+    private func makeTemporaryDirectory() throws -> URL {
+        let url = FileManager.default.temporaryDirectory
+            .appendingPathComponent(UUID().uuidString, isDirectory: true)
+        try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
+        return url
     }
 }

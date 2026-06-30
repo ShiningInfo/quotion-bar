@@ -21,7 +21,8 @@ QuotaBar/
 │   └── ProviderProtocol.swift    # 平台 Provider 统一协议（占位）
 ├── Widget/                       # Widget Extension
 │   ├── QuotaBarWidget.swift      # Widget 实现（显示"初始化中"）
-│   └── QuotaBarWidgetBundle.swift # Widget Bundle 入口
+│   ├── QuotaBarWidgetBundle.swift # Widget Bundle 入口
+│   └── Info.plist                # Widget Extension 配置
 ├── Config/
 │   ├── Keys.swift                # 配置键常量（App Group ID、Keychain 前缀等）
 │   ├── QuotaBar.entitlements     # 主 App 沙盒与权限配置
@@ -29,6 +30,7 @@ QuotaBar/
 ├── Tests/
 │   ├── QuotaBarTests/            # 主 App 单元测试
 │   └── WidgetTests/              # Widget 单元测试
+├── QuotaBar.xcodeproj            # Xcode 工程，含 App + Widget + Tests target
 ├── .env.example                  # 环境变量示例（真实凭证禁止提交）
 └── .gitignore                    # Git 忽略规则
 ```
@@ -42,9 +44,10 @@ QuotaBar/
 
 ## 构建步骤
 
-1. 在 Xcode 中打开工程目录（后续需创建 `QuotaBar.xcodeproj`）
-2. 选择 `QuotaBar` scheme，按 `⌘R` 运行主 App
-3. 选择 `QuotaBarWidgetExtension` scheme，按 `⌘R` 运行 Widget
+1. 在 Xcode 中打开 `QuotaBar/QuotaBar.xcodeproj`
+2. 选择 `QuotaBar` scheme，按 `⌘B` 构建主 App 与 Widget Extension
+3. 按 `⌘R` 运行主 App
+4. 在系统 Widget 面板添加 `Quota Bar` Widget，查看占位文案
 
 ## App Group 配置
 
@@ -75,7 +78,7 @@ App Group ID: `group.com.quotiabar.shared`
 运行单元测试：
 
 ```bash
-xcodebuild test -scheme QuotaBar -destination 'platform=macOS'
+xcodebuild test -project QuotaBar/QuotaBar.xcodeproj -scheme QuotaBar -destination 'platform=macOS'
 ```
 
 测试覆盖：

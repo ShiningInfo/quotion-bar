@@ -14,9 +14,13 @@ public final class SharedSnapshotStore {
     
     private let appGroupIdentifier: String
     private let filename: String
+    private let containerURLOverride: URL?
     
     private var containerURL: URL? {
-        FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupIdentifier)
+        if let containerURLOverride {
+            return containerURLOverride
+        }
+        return FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupIdentifier)
     }
     
     private var snapshotURL: URL? {
@@ -25,10 +29,12 @@ public final class SharedSnapshotStore {
     
     public init(
         appGroupIdentifier: String = ConfigKeys.appGroupIdentifier,
-        filename: String = ConfigKeys.snapshotFilename
+        filename: String = ConfigKeys.snapshotFilename,
+        containerURL: URL? = nil
     ) {
         self.appGroupIdentifier = appGroupIdentifier
         self.filename = filename
+        self.containerURLOverride = containerURL
     }
     
     // MARK: - Save
