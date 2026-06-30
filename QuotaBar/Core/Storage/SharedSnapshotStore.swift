@@ -37,34 +37,42 @@ public final class SharedSnapshotStore {
         self.containerURLOverride = containerURL
     }
     
-    // MARK: - Save
-    
-    public func save(snapshot: QuotaSnapshot) throws {
+    // MARK: - Snapshots
+
+    public func write(_ snapshots: [QuotaSnapshot]) throws {
         guard let url = snapshotURL else {
             throw SnapshotStoreError.containerNotFound
         }
         
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
-        let data = try encoder.encode(snapshot)
+        let data = try encoder.encode(snapshots)
         try data.write(to: url, options: .atomic)
     }
     
-    // MARK: - Load
-    
-    public func load() throws -> QuotaSnapshot? {
+    public func read() throws -> [QuotaSnapshot] {
         guard let url = snapshotURL else {
             throw SnapshotStoreError.containerNotFound
         }
         
         guard FileManager.default.fileExists(atPath: url.path) else {
-            return nil
+            return []
         }
         
         let data = try Data(contentsOf: url)
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
-        return try decoder.decode(QuotaSnapshot.self, from: data)
+        return try decoder.decode([QuotaSnapshot].self, from: data)
+    }
+
+    // MARK: - Compatibility Helpers
+
+    public func save(snapshot: QuotaSnapshot) throws {
+        try write([snapshot])
+    }
+
+    public func load() throws -> QuotaSnapshot? {
+        try read().first
     }
     
     // MARK: - Delete

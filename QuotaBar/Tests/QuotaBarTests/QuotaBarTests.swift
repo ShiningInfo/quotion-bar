@@ -11,171 +11,179 @@ import XCTest
 final class QuotaBarTests: XCTestCase {
 
     // MARK: - KeychainStore Tests
-    
+
     func testKeychainSaveAndLoad() {
         let store = KeychainStore.shared
         let service = "quota-bar.test"
         let account = "u1"
         let token = "test-xxx"
-        
-        // Clean up first
+
         store.delete(service: service, account: account)
-        
-        // Save
-        let saveResult = store.save(token: token, service: service, account: account)
-        XCTAssertTrue(saveResult, "Keychain save should succeed")
-        
-        // Load
-        let loaded = store.load(service: service, account: account)
-        XCTAssertEqual(loaded, token, "Loaded token should match saved token")
-        
-        // Delete
-        let deleteResult = store.delete(service: service, account: account)
-        XCTAssertTrue(deleteResult, "Keychain delete should succeed")
-        
-        // Load after delete
-        let afterDelete = store.load(service: service, account: account)
-        XCTAssertNil(afterDelete, "Token should be nil after delete")
+
+        XCTAssertTrue(store.save(token: token, service: service, account: account))
+        XCTAssertEqual(store.load(service: service, account: account), token)
+        XCTAssertTrue(store.delete(service: service, account: account))
+        XCTAssertNil(store.load(service: service, account: account))
     }
-    
+
     func testKeychainUpdate() {
         let store = KeychainStore.shared
         let service = "quota-bar.test.update"
         let account = "u2"
         let token1 = "token-v1"
         let token2 = "token-v2"
-        
+
         store.delete(service: service, account: account)
-        
+
         store.save(token: token1, service: service, account: account)
         XCTAssertEqual(store.load(service: service, account: account), token1)
-        
+
         store.update(token: token2, service: service, account: account)
         XCTAssertEqual(store.load(service: service, account: account), token2)
-        
+
         store.delete(service: service, account: account)
     }
-    
+
     func testKeychainLoadNonExistent() {
-        let store = KeychainStore.shared
-        let loaded = store.load(service: "non-existent-service", account: "non-existent-account")
-        XCTAssertNil(loaded, "Loading non-existent item should return nil")
+        XCTAssertNil(KeychainStore.shared.load(service: "non-existent-service", account: "non-existent-account"))
     }
-    
+
     // MARK: - SharedSnapshotStore Tests
-    
-    func testSharedSnapshotStoreSaveAndLoad() throws {
+
+    func testSharedSnapshotStoreWriteAndReadSnapshots() throws {
         let directory = try makeTemporaryDirectory()
         let store = SharedSnapshotStore(containerURL: directory)
         defer { try? FileManager.default.removeItem(at: directory) }
-        
-        // Clean up
-        try? store.delete()
-        
-        let snapshot = QuotaSnapshot(
-            timestamp: Date(),
-            providers: [
-                ProviderQuota(
-                    id: "codex",
-                    name: "Codex",
-                    totalQuota: 1000,
-                    usedQuota: 250,
-                    unit: "USD",
-                    status: .active
-                )
-            ]
-        )
-        
-        // Save
-        try store.save(snapshot: snapshot)
-        
-        // Load
-        let loaded = try store.load()
-        XCTAssertNotNil(loaded, "Loaded snapshot should not be nil")
-        XCTAssertEqual(loaded?.providers.count, 1)
-        XCTAssertEqual(loaded?.providers.first?.id, "codex")
-        XCTAssertEqual(loaded?.providers.first?.name, "Codex")
-        
-        // Delete
-        try store.delete()
-        
-        // Load after delete
-        let afterDelete = try store.load()
-        XCTAssertNil(afterDelete, "Snapshot should be nil after delete")
+
+        let snapshots = [makeSnapshot(provider: ProviderIdentifier.codex)]
+
+        try store.write(snapshots)
+
+        let loaded = try store.read()
+        XCTAssertEqual(loaded, snapshots)
     }
-    
+
+    func testSharedSnapshotStoreSaveAndLoadCompatibility() throws {
+        let directory = try makeTemporaryDirectory()
+        let store = SharedSnapshotStore(containerURL: directory)
+        defer { try? FileManager.default.removeItem(at: directory) }
+
+        let snapshot = makeSnapshot(provider: ProviderIdentifier.minimax)
+
+        try store.save(snapshot: snapshot)
+
+        XCTAssertEqual(try store.load(), snapshot)
+
+        try store.delete()
+        XCTAssertNil(try store.load())
+        XCTAssertEqual(try store.read(), [])
+    }
+
     func testSharedSnapshotStoreRawString() throws {
         let directory = try makeTemporaryDirectory()
         let store = SharedSnapshotStore(containerURL: directory)
         defer { try? FileManager.default.removeItem(at: directory) }
-        
-        // Clean up
-        try? store.delete()
-        
+
         let testString = "AppGroupConnectivityTest"
         try store.writeRawString(testString)
-        
-        let loaded = try store.readRawString()
-        XCTAssertEqual(loaded, testString, "Raw string should match after round-trip")
-        
+
+        XCTAssertEqual(try store.readRawString(), testString)
+
         try store.delete()
     }
-    
+
     // MARK: - QuotaSnapshot Model Tests
-    
-    func testProviderQuotaCalculations() {
-        let quota = ProviderQuota(
-            id: "test",
-            name: "Test",
-            totalQuota: 100,
-            usedQuota: 30,
-            unit: "USD",
-            status: .active
-        )
-        
-        XCTAssertEqual(quota.remainingQuota, 70)
-        XCTAssertEqual(quota.usagePercentage, 0.3)
-    }
-    
-    func testProviderQuotaZeroTotal() {
-        let quota = ProviderQuota(
-            id: "test",
-            name: "Test",
-            totalQuota: 0,
-            usedQuota: 10,
-            unit: "USD",
-            status: .active
-        )
-        
-        XCTAssertEqual(quota.remainingQuota, 0)
-        XCTAssertEqual(quota.usagePercentage, 0)
-    }
-    
-    func testQuotaSnapshotCoding() throws {
-        let snapshot = QuotaSnapshot(
-            timestamp: Date(),
-            providers: [
-                ProviderQuota(
-                    id: "codex",
-                    name: "Codex",
-                    totalQuota: 1000,
-                    usedQuota: 250,
-                    unit: "USD",
-                    status: .active
-                )
-            ]
-        )
-        
+
+    func testQuotaSnapshotCodingUsesUnifiedFieldNames() throws {
+        let snapshot = makeSnapshot(provider: ProviderIdentifier.codex)
+
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
         let data = try encoder.encode(snapshot)
-        
+
+        let object = try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [String: Any])
+        XCTAssertEqual(object["provider"] as? String, ProviderIdentifier.codex)
+        XCTAssertEqual(object["displayName"] as? String, "Codex")
+        XCTAssertEqual(object["planType"] as? String, "ChatGPT Plus/Codex")
+        XCTAssertEqual(object["used"] as? Double, 25)
+        XCTAssertEqual(object["remaining"] as? Double, 75)
+        XCTAssertEqual(object["total"] as? Double, 100)
+        XCTAssertEqual(object["unit"] as? String, "requests")
+        XCTAssertEqual(object["sourceType"] as? String, ProviderSourceType.webviewSession)
+        XCTAssertEqual(object["status"] as? String, ProviderStatus.synced.rawValue)
+
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         let decoded = try decoder.decode(QuotaSnapshot.self, from: data)
-        
-        XCTAssertEqual(decoded.providers.count, snapshot.providers.count)
-        XCTAssertEqual(decoded.providers.first?.id, snapshot.providers.first?.id)
+
+        XCTAssertEqual(decoded, snapshot)
+    }
+
+    // MARK: - ProviderStatus Tests
+
+    func testProviderStatusLoginSuccessTransition() {
+        XCTAssertEqual(ProviderStatus.needsLogin.transition(on: .loginSucceeded), .authenticated)
+    }
+
+    func testProviderStatusFetchSuccessTransition() {
+        XCTAssertEqual(ProviderStatus.authenticated.transition(on: .syncStarted), .syncing)
+        XCTAssertEqual(ProviderStatus.syncing.transition(on: .syncSucceeded), .synced)
+    }
+
+    func testProviderStatusRejectsInvalidTransition() {
+        XCTAssertNil(ProviderStatus.notConfigured.transition(on: .syncSucceeded))
+        XCTAssertFalse(ProviderStatus.needsLogin.canTransition(to: .synced))
+    }
+
+    // MARK: - ProviderRegistry Tests
+
+    func testProviderRegistryRegisterAndLookup() {
+        let registry = ProviderRegistry()
+        let provider = CodexProvider()
+
+        registry.register(provider: provider)
+
+        XCTAssertTrue(registry.provider(for: ProviderIdentifier.codex) === provider)
+        XCTAssertNil(registry.provider(for: "missing"))
+    }
+
+    // MARK: - Placeholder Provider Tests
+
+    func testPlaceholderProvidersReturnNotConfiguredSnapshots() async throws {
+        let providers: [ProviderProtocol] = [
+            CodexProvider(),
+            MiniMaxProvider(),
+            DeepSeekProvider()
+        ]
+
+        for provider in providers {
+            let snapshot = try await provider.fetchSnapshot()
+            let isConfigured = await provider.isConfigured()
+
+            XCTAssertFalse(isConfigured)
+            XCTAssertEqual(snapshot.provider, provider.providerId)
+            XCTAssertEqual(snapshot.displayName, provider.displayName)
+            XCTAssertEqual(snapshot.status, .notConfigured)
+            XCTAssertFalse(provider.needsReauthentication(from: snapshot))
+        }
+    }
+
+    private func makeSnapshot(provider: String) -> QuotaSnapshot {
+        QuotaSnapshot(
+            provider: provider,
+            displayName: "Codex",
+            planType: "ChatGPT Plus/Codex",
+            used: 25,
+            remaining: 75,
+            total: 100,
+            unit: "requests",
+            resetAt: Date(timeIntervalSince1970: 1_783_000_000),
+            period: "5h",
+            lastSyncedAt: Date(timeIntervalSince1970: 1_782_982_800),
+            sourceType: ProviderSourceType.webviewSession,
+            status: .synced,
+            errorMessage: nil
+        )
     }
 
     private func makeTemporaryDirectory() throws -> URL {
